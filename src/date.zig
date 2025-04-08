@@ -120,25 +120,25 @@ const Letter = enum(u4) {
 
     /// from_year converts a year number into a Letter.
     fn from_year(year: i32) Letter {
-        const ymod: usize = @bitCast(u32, @mod(year, 400));
+        const ymod: usize = @intCast(@mod(year, 400));
         return YearToLetter[ymod];
     }
 
     /// ndays returns the number of days in the year.
     fn ndays(self: Letter) u32 {
-        comptime if (builtin.target.cpu.arch.endian() != .Little) {
+        comptime if (builtin.target.cpu.arch.endian() != std.builtin.Endian.little) {
             @compileError("Date bit arithmetic requires little-endian architecture");
         };
-        const ltr = @enumToInt(self);
+        const ltr = @intFromEnum(self);
         return 366 - @as(u32, ltr >> 3);
     }
 
     /// dm_to_doy translates day and month to the day of year.
     fn dm_to_doy(self: Letter, day: u5, month: u4) DateError!u9 {
-        comptime if (builtin.target.cpu.arch.endian() != .Little) {
+        comptime if (builtin.target.cpu.arch.endian() != std.builtin.Endian.little) {
             @compileError("Date bit arithmetic requires little-endian architecture");
         };
-        const ltr = @enumToInt(self);
+        const ltr = @intFromEnum(self);
         const leap = @as(u32, ltr >> 3);
         const index = (@as(u32, month) << 6) | (@as(u32, day) << 1) | (@as(u32, leap));
 
@@ -146,7 +146,7 @@ const Letter = enum(u4) {
             return DateError.InvalidArgument;
         }
 
-        const doy = @truncate(u9, (index -% (@as(u32, MdlToOl[index]) & 0x3ff)) >> 1);
+        const doy = @as(u9, @truncate((index -% (@as(u32, MdlToOl[index]) & 0x3ff)) >> 1));
         if (doy > 365) {
             return DateError.InvalidArgument;
         }

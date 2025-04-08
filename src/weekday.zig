@@ -41,25 +41,25 @@ const Weekday = enum(u3) {
     /// (ISO 8601 weekday number)
     pub inline fn number_from_monday(self: Weekday) u8 {
         const v = [7]u8{ 2, 3, 4, 5, 6, 7, 1 };
-        return v[@enumToInt(self) - 1];
+        return v[@intFromEnum(self) - 1];
     }
 
     /// number_from_sunday returns a day-of-week number starting from Sunday = 1.
     pub inline fn number_from_sunday(self: Weekday) u8 {
         const v = [7]u8{ 3, 4, 5, 6, 7, 1, 2 };
-        return v[@enumToInt(self) - 1];
+        return v[@intFromEnum(self) - 1];
     }
 
     /// num_days_from_monday a day-of-week number starting from Monday = 0.
     pub inline fn num_days_from_monday(self: Weekday) u8 {
         const v = [7]u8{ 1, 2, 3, 4, 5, 6, 0 };
-        return v[@enumToInt(self) - 1];
+        return v[@intFromEnum(self) - 1];
     }
 
     /// num_days_from_sunday a day-of-week number starting from Sunday = 0.
     pub inline fn num_days_from_sunday(self: Weekday) u8 {
         const v = [7]u8{ 2, 3, 4, 5, 6, 0, 1 };
-        return v[@enumToInt(self) - 1];
+        return v[@intFromEnum(self) - 1];
     }
 };
 
